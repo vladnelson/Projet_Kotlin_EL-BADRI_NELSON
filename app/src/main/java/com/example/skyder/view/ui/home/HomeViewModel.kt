@@ -1,4 +1,4 @@
-package com.example.skyder.ui.home
+package com.example.skyder.view.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

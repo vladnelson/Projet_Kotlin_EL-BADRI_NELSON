@@ -1,5 +1,6 @@
 package com.example.skyder.service.network
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -8,29 +9,25 @@ import java.util.concurrent.TimeUnit
 
 const val BASEURL = "https://www.prevision-meteo.ch/services/json/"
 
-class ApiClient {
-    companion object {
-        private  var retrofit : Retrofit? = null
+object ApiClient {
 
-        fun getApiClient() : Retrofit {
-            val gson  = GsonBuilder().setLenient().create()
+    private val gson : Gson by lazy {
+        GsonBuilder().setLenient().create()
+    }
 
-            val okHttpClient  = OkHttpClient.Builder()
-                .readTimeout(100,TimeUnit.SECONDS)
-                .connectTimeout(100,TimeUnit.SECONDS)
-                .build()
+    private  val httpClient:OkHttpClient by lazy {
+        OkHttpClient.Builder().build()
+    }
 
-            if (retrofit ==  null){
-                retrofit =  Retrofit.Builder()
-                    .baseUrl(BASEURL)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build()
-            }
+    private val retrofit : Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASEURL)
+            .client(httpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+    }
 
-            return  retrofit!!;
-        }
-
-
+    val apiService : ApiInterface by lazy {
+        retrofit.create(ApiInterface::class.java)
     }
 }

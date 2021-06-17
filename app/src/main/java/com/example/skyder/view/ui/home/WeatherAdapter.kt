@@ -33,8 +33,8 @@ class WeatherAdapter(val context: Context?) : RecyclerView.Adapter<WeatherAdapte
 
     class WeatherViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         fun bindView(item: WeatherModel?) {
-            itemView.findViewById<TextView>(R.id.tv_weather_title).text = item?.title
-            itemView.findViewById<TextView>(R.id.tv_weather_item_body).text = item?.body
+            //itemView.findViewById<TextView>(R.id.tv_weather_title).text = item?.
+            //itemView.findViewById<TextView>(R.id.tv_weather_item_body).text = item?.body
 
         }
     }

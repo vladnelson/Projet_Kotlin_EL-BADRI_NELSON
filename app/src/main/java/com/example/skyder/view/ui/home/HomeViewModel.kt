@@ -10,16 +10,13 @@ class HomeViewModel : ViewModel() {
     private val _text = MutableLiveData<String>().apply {
         value = "This is home Fragment"
     }
-    private var weatherRepository : HomeRepository? =  null
-    private var  weatherModelListLiveData :  LiveData<List<WeatherModel>> ? = null
+    private var weatherRepository: HomeRepository? = null
+    var weatherModelListLiveData: LiveData<WeatherModel>? = null
     val text: LiveData<String> = _text
 
     init {
-        weatherRepository =  HomeRepository()
-        weatherModelListLiveData  = MutableLiveData()
+        weatherRepository = HomeRepository()
+        weatherModelListLiveData = MutableLiveData()
     }
 
-    fun getWeather(){
-        weatherModelListLiveData =  weatherRepository?.getweatherCurrent()
-    }
 }

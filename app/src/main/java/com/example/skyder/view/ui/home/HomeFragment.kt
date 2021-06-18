@@ -17,9 +17,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skyder.R
+import com.example.skyder.domain.WeatherDay
 import com.example.skyder.service.network.ApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -35,6 +37,7 @@ class HomeFragment : Fragment() {
     var tv_weather_title: TextView? = null
     var tv_weather_item_body: TextView? = null
     var tv_hour_current: TextView? = null
+    var tv_AvgTempMin: TextView? = null
     var img_delete: ImageView? = null
 
     var locationManager: LocationManager? = null
@@ -59,6 +62,7 @@ class HomeFragment : Fragment() {
         tv_weather_title = root.findViewById<TextView>(R.id.tv_weather_title)
         tv_weather_item_body = root.findViewById<TextView>(R.id.tv_weather_item_body)
         tv_hour_current = root.findViewById<TextView>(R.id.tv_hour_current)
+        tv_AvgTempMin = root.findViewById<TextView>(R.id.tv_AvgTempMin)
         img_delete = root.findViewById<ImageView>(R.id.img_delete)
 
 
@@ -79,7 +83,8 @@ class HomeFragment : Fragment() {
                 delay(2000)
 
 
-                locationManager =context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                locationManager =
+                    context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
                 var criteria = Criteria()
 
@@ -102,12 +107,15 @@ class HomeFragment : Fragment() {
                         override fun onLocationChanged(l: Location) {
 
                         }
+
                         override fun onProviderEnabled(p: String) {
 
                         }
+
                         override fun onProviderDisabled(p: String) {
 
                         }
+
                         override fun onStatusChanged(p: String, status: Int, extras: Bundle) {
 
                         }
@@ -116,7 +124,7 @@ class HomeFragment : Fragment() {
                         ?.requestLocationUpdates(provider!!, 1, 0.1f, loclistener)
 
                     location = locationManager?.getLastKnownLocation(provider!!)
-                }else  {
+                } else {
                     requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 1)
                 }
                 Log.d("HomeRepository", location.toString())
@@ -152,6 +160,37 @@ class HomeFragment : Fragment() {
                                 img_delete!!
                             )
                         img_delete?.visibility = View.VISIBLE
+
+
+                        var listWheatherDay: ArrayList<WeatherDay> = ArrayList()
+                        listWheatherDay.add(content.fcst_day_0!!)
+                        listWheatherDay.add(content.fcst_day_1!!)
+                        listWheatherDay.add(content.fcst_day_2!!)
+                        listWheatherDay.add(content.fcst_day_3!!)
+                        listWheatherDay.add(content.fcst_day_4!!)
+
+                        var avgtmpdayMin = 0F
+                        var avgtmpdayMax = 0F
+
+                        //==========================================================================================
+                        // Moyenne des températures Max et Min.
+                        //==========================================================================================
+                        listWheatherDay.forEach {
+                            avgtmpdayMin += it.tmin!!.toFloat() / listWheatherDay.size
+                            avgtmpdayMax += it.tmax!!.toFloat() / listWheatherDay.size
+                        }
+                        tv_AvgTempMin?.text="Moyennes des températures (5Jours):  ${avgtmpdayMin} °"
+
+
+                        rv_home?.visibility = View.VISIBLE
+
+
+                        adapter = WeatherAdapter(this@HomeFragment.context)
+                        rv_home?.layoutManager = LinearLayoutManager(context)
+                        rv_home?.adapter = adapter
+
+                        adapter?.setData(listWheatherDay)
+
 
                         /*
                         Toast.makeText(
@@ -191,7 +230,7 @@ class HomeFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when(requestCode){
+        when (requestCode) {
             1 -> {
 
                 if ((ActivityCompat.checkSelfPermission(

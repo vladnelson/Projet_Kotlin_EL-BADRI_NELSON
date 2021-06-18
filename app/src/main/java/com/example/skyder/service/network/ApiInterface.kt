@@ -11,4 +11,7 @@ interface ApiInterface {
 
     @GET("{ville}")
     suspend fun GetweatherCurrent(@Path("ville") ville:String) : Response<WeatherModel>
+
+    @GET("lat={lat}lng={lng}")
+    suspend fun GetweatherLocate(@Path("lat") lat:String, @Path("lng") lng :String ) : Response<WeatherModel>
 }

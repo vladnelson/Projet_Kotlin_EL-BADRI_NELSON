@@ -125,7 +125,7 @@ class HomeFragment : Fragment() {
                     var lat: Double? = location?.latitude
                     var lng: Double? = location?.longitude
 
-                    Log.d("HomeRepository", "Position Actuelle : lat= " + lat + ", long=  " + lng)
+                    Log.d("HomeRepository", "Position Actuelle : lat= ${lat}, long= ${lng}")
 
                 } else {
                     Log.d("HomeRepository", "No provider")

@@ -179,7 +179,7 @@ class HomeFragment : Fragment() {
                             avgtmpdayMin += it.tmin!!.toFloat() / listWheatherDay.size
                             avgtmpdayMax += it.tmax!!.toFloat() / listWheatherDay.size
                         }
-                        tv_AvgTempMin?.text="Moyennes des températures (5Jours):  ${avgtmpdayMin} °"
+                        tv_AvgTempMin?.text="Moyd Temp (5Jours):  Min : ${avgtmpdayMin} ° | Max : ${avgtmpdayMax} °"
 
 
                         rv_home?.visibility = View.VISIBLE
